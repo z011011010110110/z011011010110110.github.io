@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gench Link</title>
+    <style>
+        body {
+            font-family: 'Comfortaa', cursive;
+            background-color: #f5f5f5; /* Set a background color */
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            margin: 0 auto;
+            margin-top: 20px;
+        }
+
+        h1 {
+            color: #E9A66B; /* Theme color */
+        }
+
+        #genchLink {
+            display: block;
+            margin-top: 20px;
+            background-color: #E9A66B; /* Theme color */
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        #genchLink:hover {
+            background-color: #D54B59; /* Darker theme color on hover */
+        }
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Comfortaa">
+</head>
+<body>
+    <div id="container">
+        <h1>We don't have a working webapp yet.':</h1>
+        <a id="genchLink" href="#" target="_blank">Open Gench</a>
+    </div>
+
+    <script>
+        // Get the current URL
+        var currentURL = window.location.href;
+
+        // Remove any potential ".html" extension from the URL
+        currentURL = currentURL.replace(/\.html$/, '');
+
+        // Find the index of the '?' character in the URL
+        var questionMarkIndex = currentURL.indexOf('?');
+
+        if (questionMarkIndex !== -1) {
+            // Extract the parameters after the '?'
+            var parametersString = currentURL.slice(questionMarkIndex + 1);
+
+            // Construct the "gench://post" URL with the extracted parameters
+            var genchURL = 'gench://post?' + parametersString;
+
+            // Set the href attribute of the Gench link
+            var genchLink = document.getElementById('genchLink');
+            genchLink.href = genchURL;
+        } else {
+            // If there's no '?' character in the URL, display an error message or handle it as needed
+            alert("No parameters found in the URL.");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": “AP345DXQL4.cc.genplaza”,
+                "paths": ["/post”, “/chat”]
+            }
+        ]
+    }
+}
+
