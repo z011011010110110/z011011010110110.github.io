@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Gench Link</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             font-family: 'Comfortaa', cursive;
@@ -36,15 +37,22 @@
         }
 
         #genchLink:hover {
-            background-color: #D54B59; /* Darker theme color on hover */
+            background-color: #D9864B; /* Darker theme color on hover */
+        }
+
+        /* Media queries for mobile responsiveness */
+        @media screen and (max-width: 480px) {
+            #container {
+                max-width: 90%;
+            }
         }
     </style>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Comfortaa">
 </head>
 <body>
     <div id="container">
-        <h1>We don't have a working webapp yet.':</h1>
-        <a id="genchLink" href="#" target="_blank">Open Gench</a>
+        <h1>We don't have a working web app yet...</h1>
+        <a id="genchLink" href="#" target="_blank">Open on Gench</a>
     </div>
 
     <script>
@@ -69,8 +77,9 @@
             genchLink.href = genchURL;
         } else {
             // If there's no '?' character in the URL, display an error message or handle it as needed
-            alert("No parameters found in the URL.");
+            //alert("No parameters found in the URL.");
         }
     </script>
 </body>
 </html>
+
