@@ -1,85 +1,269 @@
+
 <!DOCTYPE html>
 <html>
-<head>
+
+    <script src="https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.5.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js"></script>
+  <head>
     <title>Gench Link</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: 'Comfortaa', cursive;
-            background-color: #f5f5f5; /* Set a background color */
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-
-        #container {
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            max-width: 400px;
-            margin: 0 auto;
-            margin-top: 20px;
-        }
-
-        h1 {
-            color: #E9A66B; /* Theme color */
-        }
-
-        #genchLink {
-            display: block;
-            margin-top: 20px;
-            background-color: #E9A66B; /* Theme color */
-            color: #fff;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-
-        #genchLink:hover {
-            background-color: #D9864B; /* Darker theme color on hover */
-        }
-
-        /* Media queries for mobile responsiveness */
-        @media screen and (max-width: 480px) {
-            #container {
-                max-width: 90%;
+        <style>
+            body {
+                font-family: 'Comfortaa', cursive;
+                background-color: #f5f5f5; /* Set a background color */
+                text-align: center;
+                margin: 0;
+                padding: 0;
             }
-        }
-    </style>
+
+            .container {
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+                max-width: 400px;
+                margin: 0 auto;
+                margin-top: 20px;
+            }
+
+            h1 {
+                color: #E9A66B; /* Theme color */
+            }
+            .genchButtonContainer{
+                margin: 0 auto;
+                max-width: 400px;
+            }
+            .genchButton {
+                display: flex;
+                margin-top: 20px;
+                background-color: #E9A66B; /* Theme color */
+                color: #fff;
+                padding: 10px 10px;
+                text-decoration: none;
+                border-radius: 5px;
+            }
+
+            .genchButton:hover {
+                background-color: #D9864B; /* Darker theme color on hover */
+            }
+            
+            #dateTime {
+                text-align: right;
+                padding: 10px;
+            }
+            
+            #mapsLink {
+                text-align: left;
+                padding: 12px;
+            }
+            #infoDiv {
+                display: inline;
+            }
+            
+            .small-circle {
+                width: 30px; /* Adjust the width to your preferred size */
+                height: 30px; /* Adjust the height to match the width for a perfect circle */
+                border-radius: 50%; /* Create a circular shape */
+            }
+            
+            .username {
+                padding:0 10px;
+                font-size: 20px;
+            }
+            
+            .empty-div {
+                height: 40px; /* Set the desired height */
+                background-color: transparent; /* Optional: Set background color */
+            }
+            /* Media queries for mobile responsiveness */
+            @media screen and (max-width: 480px) {
+                #container {
+                    max-width: 90%;
+                }
+            }
+        </style>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Comfortaa">
-</head>
-<body>
-    <div id="container">
-        <h1>We don't have a working web app yet...</h1>
-        <a id="genchLink" href="#" target="_blank">Open on Gench</a>
+  </head>
+  <body>
+    <div class="container">
+      <h1 id = "postTitle">This post doesn't exist....</h1>
+      
+      
+
+      
     </div>
-
+    <div class="genchButtonContainer">
+        <a class="genchButton" id = "genchLink" href="#" target="_blank">Open on Gench</a>
+        <a class="genchButton" href="https://apps.apple.com/us/app/gench/id6452316521" target="_blank">Get the app for full experience</a>
+    </div>
+    
+    <div class="empty-div"></div>
+    
     <script>
-        // Get the current URL
-        var currentURL = window.location.href;
+          var currentURL = window.location.href;
+          currentURL = currentURL.replace(/\.html$/, '');
 
-        // Remove any potential ".html" extension from the URL
-        currentURL = currentURL.replace(/\.html$/, '');
+          // Find the index of the '?' character in the URL
+          var questionMarkIndex = currentURL.indexOf('?');
 
-        // Find the index of the '?' character in the URL
-        var questionMarkIndex = currentURL.indexOf('?');
+          
+          //Get paramenters of a url
+          if (questionMarkIndex !== -1) {
+              var parametersString = currentURL.slice(questionMarkIndex + 1);
 
-        if (questionMarkIndex !== -1) {
-            // Extract the parameters after the '?'
-            var parametersString = currentURL.slice(questionMarkIndex + 1);
+              var genchURL = 'gench://post?' + parametersString;
 
-            // Construct the "gench://post" URL with the extracted parameters
-            var genchURL = 'gench://post?' + parametersString;
-
-            // Set the href attribute of the Gench link
-            var genchLink = document.getElementById('genchLink');
-            genchLink.href = genchURL;
-        } else {
-            // If there's no '?' character in the URL, display an error message or handle it as needed
-            //alert("No parameters found in the URL.");
-        }
+              var genchLink = document.getElementById('genchLink');
+              genchLink.href = genchURL;
+          } else {
+          }
     </script>
-</body>
-</html>
+    <script type = "module">
+        
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
+    import { getFirestore, getDoc, doc } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-auth.js";
 
+      // Your Firebase configuration here
+      const firebaseConfig = {
+        apiKey: "AIzaSyCKRdOC3E6zw9P8aqhMh8F5Z2VnJ5tOrNY",
+        authDomain: "gench-a06ca.firebaseapp.com",
+        databaseURL: "https://gench-a06ca-default-rtdb.firebaseio.com",
+        projectId: "gench-a06ca",
+        storageBucket: "gench-a06ca.appspot.com",
+        messagingSenderId: "96515296525",
+        appId: "1:96515296525:web:680996f90b4dd4f957b444",
+        measurementId: "G-MNKZ38Y3KM"
+      };
+        
+       // Initialize Firebase
+       const app = initializeApp(firebaseConfig);
+       const db = getFirestore(app)
+
+       const auth = getAuth();
+       signInAnonymously(auth)
+         .then(() => {
+           console.log("Logged in")
+         })
+         .catch((error) => {
+           const errorCode = error.code;
+           const errorMessage = error.message;
+           console.log(errorMessage)
+         });
+       
+        var parametersString = ""
+        currentURL = window.location.href.replace(/\.html$/, '');
+        var questionMarkIndex = currentURL.indexOf('=');
+
+        //Get paramenters of a url
+        if (questionMarkIndex !== -1) {
+            parametersString = currentURL.slice(questionMarkIndex + 1);
+        }
+            
+            
+            getDoc(doc(db, 'posts', parametersString)).then(docSnap => {
+                if(docSnap.exists()) {
+                    getDoc(doc(db, 'users', docSnap.data().poster)).then(docUserSnap => {
+                        console.log(docUserSnap.data().username)
+                        console.log(docUserSnap.data().profile[0])
+                        console.log(docSnap.data().title)
+                        console.log(docSnap.data().description)
+                        console.log(docSnap.data().files[0])
+                        
+                        const displayDiv = document.getElementById('postTitle');
+                        displayDiv.textContent = docSnap.data().title
+                        
+                        
+                        const dataParagraph = document.createElement('p');
+                        dataParagraph.textContent = docSnap.data().description
+                        dataParagraph.style.fontSize = '14px';
+                        dataParagraph.style.color = 'black';
+                         
+                         
+                         const dateParagraphDiv = document.createElement('div');
+                         dateParagraphDiv.id = 'dateTime';
+                         const dateParagraph = document.createElement('p');
+                         const timestamp = { seconds: docSnap.data().timestamp.seconds, nanoseconds: docSnap.data().timestamp.nanoseconds};
+                         const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
+                         const formattedDate = date.toLocaleString(); // You can customize the format as needed
+                         dateParagraph.style.textAlign = "right";
+                         
+                         dateParagraph.textContent = formattedDate
+                         dateParagraph.style.fontSize = '14px';
+                         dateParagraph.style.color = 'black';
+                         dateParagraphDiv.appendChild(dateParagraph)
+                         
+                        const imgElement = document.createElement('img');
+                        imgElement.src = docSnap.data().files[0];
+                        imgElement.style.maxWidth = '100%';
+                        imgElement.style.height = 'auto';
+                        
+                        displayDiv.appendChild(dataParagraph);
+                        displayDiv.appendChild(imgElement);
+                        
+                        const infoDiv = document.createElement('div');
+                        infoDiv.id = "infoDiv"
+                        infoDiv.appendChild(createShowLocationButton(docSnap.data().geolocation.latitude,docSnap.data().geolocation.longitude));
+                        
+                        infoDiv.appendChild(dateParagraphDiv);
+                        displayDiv.appendChild(infoDiv
+                                               )
+                        displayDiv.appendChild(createUserTab(docUserSnap.data()));
+                        
+                    })
+                }
+                else{
+                    console.log("Doesn't exists")
+                }
+            })
+            
+        
+        function createUserTab(userData) {
+            // Create a new div element for the user tab
+            const userTabDiv = document.createElement('div');
+            userTabDiv.classList.add("genchButton");
+
+            // Create a div for the circular profile picture
+            const profilePictureDiv = document.createElement('div');
+            profilePictureDiv.classList.add("profile-picture");
+            // Create an img element for the profile picture
+            const profilePictureImg = document.createElement('img');
+            profilePictureImg.src = userData.profile[0]; // Set the image source URL
+            profilePictureImg.alt = "Profile Picture"; // Add alt text for accessibility
+            profilePictureImg.classList.add("small-circle");
+            
+            // Create a div for the user name
+            const usernameDiv = document.createElement('div');
+            usernameDiv.classList.add("username");
+            usernameDiv.textContent = userData.username; // Set the username text
+            
+            
+            // Append the profile picture and username to the user tab div
+            profilePictureDiv.appendChild(profilePictureImg);
+            userTabDiv.appendChild(profilePictureDiv);
+            userTabDiv.appendChild(usernameDiv);
+
+            return userTabDiv; // Return the container if needed
+        }
+        
+        function createShowLocationButton(latitude, longitude) {
+            // Create the button element
+            var button = document.createElement("a");
+            button.id = "mapsLink";
+            button.textContent = "Open in Google Maps";
+            button.style.textAlign = "left"; // Align the text to the left
+            button.style.fontSize = "14px"; // Adjust the font size as needed
+
+            // Construct the map URL using the coordinates
+            button.href = "https://maps.google.com/maps?q=" + latitude + "," + longitude;
+            button.target = "_blank";
+
+            // Return the created button
+            return button;
+        }
+        
+        
+    </script>
+  </body>
+</html>
