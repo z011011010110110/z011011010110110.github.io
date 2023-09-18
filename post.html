@@ -145,6 +145,8 @@
        signInAnonymously(auth)
          .then(() => {
            console.log("Logged in")
+           loadPost()
+           
          })
          .catch((error) => {
            const errorCode = error.code;
@@ -161,7 +163,7 @@
             parametersString = currentURL.slice(questionMarkIndex + 1);
         }
             
-            
+         function loadPost(){
             getDoc(doc(db, 'posts', parametersString)).then(docSnap => {
                 if(docSnap.exists()) {
                     getDoc(doc(db, 'users', docSnap.data().poster)).then(docUserSnap => {
@@ -217,7 +219,7 @@
                     console.log("Doesn't exists")
                 }
             })
-            
+        }
         
         function createUserTab(userData) {
             // Create a new div element for the user tab
