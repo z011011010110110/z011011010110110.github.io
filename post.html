@@ -87,7 +87,7 @@
   </head>
   <body>
     <div class="container">
-      <h1 id = "postTitle">This post doesn't exist....</h1>
+      <h1 id = "postTitle">...</h1>
       
       
 
@@ -217,10 +217,14 @@
                 }
                 else{
                     console.log("Doesn't exists")
+                    loadPostFail()
                 }
             })
         }
-        
+        function loadPostFail(){
+            const displayDiv = document.getElementById('postTitle');
+            displayDiv.textContent = "This post doesn't exist."
+        }
         function createUserTab(userData) {
             // Create a new div element for the user tab
             const userTabDiv = document.createElement('div');
