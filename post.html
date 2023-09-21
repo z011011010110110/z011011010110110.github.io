@@ -1,11 +1,11 @@
 
 <!DOCTYPE html>
 <html>
-    <meta property="og:url"                content="http://www.nytimes.com/2015/02/19/arts/international/when-great-minds-dont-think-alike.html" />
+    <meta property="og:url"                content="" />
     <meta property="og:type"               content="article" />
-    <meta property="og:title"              content="When Great Minds Don’t Think Alike" />
-    <meta property="og:description"        content="How much does culture influence creative thinking?" />
-    <meta property="og:image"              content="http://static01.nyt.com/images/2015/02/19/arts/international/19iht-btnumbers19A/19iht-btnumbers19A-facebookJumbo-v2.jpg" />
+    <meta property="og:title"              content="" />
+    <meta property="og:description"        content="" />
+    <meta property="og:image"              content="" />
     
     <script src="https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.5.0/firebase-auth.js"></script>
@@ -168,64 +168,67 @@
             parametersString = currentURL.slice(questionMarkIndex + 1);
         }
             
-         function loadPost(){
-            getDoc(doc(db, 'posts', parametersString)).then(docSnap => {
-                if(docSnap.exists()) {
-                    getDoc(doc(db, 'users', docSnap.data().poster)).then(docUserSnap => {
-                        console.log(docUserSnap.data().username)
-                        console.log(docUserSnap.data().profile[0])
-                        console.log(docSnap.data().title)
-                        console.log(docSnap.data().description)
-                        console.log(docSnap.data().files[0])
+        function loadPost(){
+        getDoc(doc(db, 'posts', parametersString)).then(docSnap => {
+            if(docSnap.exists()) {
+                
+                meta(window.location.href, docSnap.data().title, docSnap.data().description, docSnap.data().files[0])
+                
+                getDoc(doc(db, 'users', docSnap.data().poster)).then(docUserSnap => {
+                    console.log(docUserSnap.data().username)
+                    console.log(docUserSnap.data().profile[0])
+                    console.log(docSnap.data().title)
+                    console.log(docSnap.data().description)
+                    console.log(docSnap.data().files[0])
+                    
+                    const displayDiv = document.getElementById('postTitle');
+                    displayDiv.textContent = docSnap.data().title
+                    
+                    
+                    const dataParagraph = document.createElement('p');
+                    dataParagraph.textContent = docSnap.data().description
+                    dataParagraph.style.fontSize = '14px';
+                    dataParagraph.style.color = 'black';
                         
-                        const displayDiv = document.getElementById('postTitle');
-                        displayDiv.textContent = docSnap.data().title
                         
+                        const dateParagraphDiv = document.createElement('div');
+                        dateParagraphDiv.id = 'dateTime';
+                        const dateParagraph = document.createElement('p');
+                        const timestamp = { seconds: docSnap.data().timestamp.seconds, nanoseconds: docSnap.data().timestamp.nanoseconds};
+                        const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
+                        const formattedDate = date.toLocaleString(); // You can customize the format as needed
+                        dateParagraph.style.textAlign = "right";
                         
-                        const dataParagraph = document.createElement('p');
-                        dataParagraph.textContent = docSnap.data().description
-                        dataParagraph.style.fontSize = '14px';
-                        dataParagraph.style.color = 'black';
-                         
-                         
-                         const dateParagraphDiv = document.createElement('div');
-                         dateParagraphDiv.id = 'dateTime';
-                         const dateParagraph = document.createElement('p');
-                         const timestamp = { seconds: docSnap.data().timestamp.seconds, nanoseconds: docSnap.data().timestamp.nanoseconds};
-                         const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
-                         const formattedDate = date.toLocaleString(); // You can customize the format as needed
-                         dateParagraph.style.textAlign = "right";
-                         
-                         dateParagraph.textContent = formattedDate
-                         dateParagraph.style.fontSize = '14px';
-                         dateParagraph.style.color = 'black';
-                         dateParagraphDiv.appendChild(dateParagraph)
-                         
-                        const imgElement = document.createElement('img');
-                        imgElement.src = docSnap.data().files[0];
-                        imgElement.style.maxWidth = '100%';
-                        imgElement.style.height = 'auto';
+                        dateParagraph.textContent = formattedDate
+                        dateParagraph.style.fontSize = '14px';
+                        dateParagraph.style.color = 'black';
+                        dateParagraphDiv.appendChild(dateParagraph)
                         
-                        displayDiv.appendChild(dataParagraph);
-                        displayDiv.appendChild(imgElement);
-                        
-                        const infoDiv = document.createElement('div');
-                        infoDiv.id = "infoDiv"
-                        infoDiv.appendChild(createShowLocationButton(docSnap.data().geolocation.latitude,docSnap.data().geolocation.longitude));
-                        
-                        infoDiv.appendChild(dateParagraphDiv);
-                        displayDiv.appendChild(infoDiv
-                                               )
-                        displayDiv.appendChild(createUserTab(docUserSnap.data()));
-                        
-                    })
-                }
-                else{
-                    console.log("Doesn't exists")
-                    loadPostFail()
-                }
-            })
-        }
+                    const imgElement = document.createElement('img');
+                    imgElement.src = docSnap.data().files[0];
+                    imgElement.style.maxWidth = '100%';
+                    imgElement.style.height = 'auto';
+                    
+                    displayDiv.appendChild(dataParagraph);
+                    displayDiv.appendChild(imgElement);
+                    
+                    const infoDiv = document.createElement('div');
+                    infoDiv.id = "infoDiv"
+                    infoDiv.appendChild(createShowLocationButton(docSnap.data().geolocation.latitude,docSnap.data().geolocation.longitude));
+                    
+                    infoDiv.appendChild(dateParagraphDiv);
+                    displayDiv.appendChild(infoDiv
+                                            )
+                    displayDiv.appendChild(createUserTab(docUserSnap.data()));
+                    
+                })
+            }
+            else{
+                console.log("Doesn't exists")
+                loadPostFail()
+            }
+        })
+    }
         function loadPostFail(){
             const displayDiv = document.getElementById('postTitle');
             displayDiv.textContent = "This post doesn't exist."
@@ -274,7 +277,29 @@
             return button;
         }
         
-        
+        function meta(html, title, description, img){
+            const ogHtmlMeta = document.querySelector('meta[property="og:url"]');
+            if (ogHtmlMeta) {
+                ogHtmlMeta.setAttribute('content', html);
+            }
+            
+            const ogTitleMeta = document.querySelector('meta[property="og:title"]');
+            if (ogTitleMeta) {
+                ogTitleMeta.setAttribute('content', title);
+            }
+
+            // Select and modify og:description
+            const ogDescriptionMeta = document.querySelector('meta[property="og:description"]');
+            if (ogDescriptionMeta) {
+                ogDescriptionMeta.setAttribute('content', description);
+            }
+
+            // Select and modify og:image
+            const ogImageMeta = document.querySelector('meta[property="og:image"]');
+            if (ogImageMeta) {
+                ogImageMeta.setAttribute('content', img);
+            }
+        }
     </script>
   </body>
 </html>
