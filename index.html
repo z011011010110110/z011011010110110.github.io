@@ -1,27 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Current URL Button</title>
+    <meta http-equiv="refresh" content="0;url=https://www.genplaza.cc">
 </head>
 <body>
-    <p>Current URL:</p>
-    <p id="currentUrlText"></p>
-    
-    <button id="currentUrlButton">Open Current URL</button>
-
-    <script>
-        // Get the current URL
-        const currentURL = window.location.href;
-
-        // Get the text and button elements by their IDs
-        const currentUrlText = document.getElementById('currentUrlText');
-        const currentUrlButton = document.getElementById('currentUrlButton');
-
-        // Set the text content to display the current URL
-        currentUrlText.textContent = currentURL;
-
-        // Set the href attribute of the button to the current URL
-        currentUrlButton.setAttribute('onclick', `window.location.href='${currentURL}'`);
-    </script>
+    <!-- This content will be displayed if the redirection doesn't occur -->
+    <p>If you are not redirected, <a href="https://www.genplaza.cc">click here</a>.</p>
 </body>
 </html>
