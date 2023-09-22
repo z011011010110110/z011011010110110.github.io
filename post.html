@@ -13,6 +13,8 @@
   <head>
     <title>Gench Link</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
         <style>
             body {
                 font-family: 'Comfortaa', cursive;
@@ -63,7 +65,31 @@
                 padding: 12px;
             }
             #infoDiv {
-                display: inline;
+                display: flex;
+                justify-content: space-between;
+            }
+            
+            .like-tab-container {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              color: gray;
+            }
+
+            .like-icon,
+            .dislike-icon {
+              font-size: 20px;
+              padding: 2px;
+            }
+
+            .like-count,
+            .dislike-count,
+            .space {
+              font-size: 15px;
+            }
+
+            .space {
+              padding: 0 8px; /* Adjust as needed for spacing */
             }
             
             .small-circle {
@@ -123,6 +149,7 @@
               genchLink.href = genchURL;
           } else {
           }
+        
     </script>
     <script type = "module">
         
@@ -191,34 +218,48 @@
                     dataParagraph.style.color = 'black';
                         
                         
-                        const dateParagraphDiv = document.createElement('div');
-                        dateParagraphDiv.id = 'dateTime';
-                        const dateParagraph = document.createElement('p');
-                        const timestamp = { seconds: docSnap.data().timestamp.seconds, nanoseconds: docSnap.data().timestamp.nanoseconds};
-                        const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
-                        const formattedDate = date.toLocaleString(); // You can customize the format as needed
-                        dateParagraph.style.textAlign = "right";
-                        
-                        dateParagraph.textContent = formattedDate
-                        dateParagraph.style.fontSize = '14px';
-                        dateParagraph.style.color = 'black';
-                        dateParagraphDiv.appendChild(dateParagraph)
+                    const dateParagraphDiv = document.createElement('div');
+                    dateParagraphDiv.id = 'dateTime';
+                    const dateParagraph = document.createElement('p');
+                    const timestamp = { seconds: docSnap.data().timestamp.seconds, nanoseconds: docSnap.data().timestamp.nanoseconds};
+                    const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
+                    const formattedDate = date.toLocaleString(); // You can customize the format as needed
+                    dateParagraph.style.textAlign = "right";
+                    
+                    dateParagraph.textContent = formattedDate
+                    dateParagraph.style.fontSize = '14px';
+                    dateParagraph.style.color = 'black';
+                    dateParagraphDiv.appendChild(dateParagraph)
                         
                     const imgElement = document.createElement('img');
                     imgElement.src = docSnap.data().files[0];
                     imgElement.style.maxWidth = '100%';
                     imgElement.style.height = 'auto';
                     
+                    
+                    
+                    const likeTab = createLikeTab(docSnap.data().likeList.length, docSnap.data().dislikeList.length);
+                    
+                    
+                    
                     displayDiv.appendChild(dataParagraph);
                     displayDiv.appendChild(imgElement);
                     
                     const infoDiv = document.createElement('div');
                     infoDiv.id = "infoDiv"
-                    infoDiv.appendChild(createShowLocationButton(docSnap.data().geolocation.latitude,docSnap.data().geolocation.longitude));
+                    
+                    
+                    
+                    displayDiv.appendChild(createShowLocationButton(docSnap.data().geolocation.latitude,docSnap.data().geolocation.longitude));
+                    
+                    
                     
                     infoDiv.appendChild(dateParagraphDiv);
-                    displayDiv.appendChild(infoDiv
-                                            )
+                    
+                    
+                    infoDiv.appendChild(likeTab);
+                    
+                    displayDiv.appendChild(infoDiv)
                     displayDiv.appendChild(createUserTab(docUserSnap.data()));
                     
                 })
@@ -259,6 +300,39 @@
             userTabDiv.appendChild(usernameDiv);
 
             return userTabDiv; // Return the container if needed
+        }
+        
+        function createLikeTab(likes, dislikes) {
+          const likeTabContainer = document.createElement('div');
+          likeTabContainer.classList.add('like-tab-container');
+
+          const likeIconContainer = document.createElement('div');
+          likeIconContainer.classList.add('like-icon');
+          likeIconContainer.innerHTML = '<i class="fas fa-thumbs-up"></i>';
+
+          const likeCount = document.createElement('span');
+          likeCount.textContent = likes;
+          likeCount.classList.add('like-count');
+
+          const space = document.createElement('span');
+          space.classList.add('space');
+          space.textContent = '   ';
+
+          const dislikeIconContainer = document.createElement('div');
+          dislikeIconContainer.classList.add('dislike-icon');
+          dislikeIconContainer.innerHTML = '<i class="fas fa-thumbs-down"></i>';
+
+          const dislikeCount = document.createElement('span');
+          dislikeCount.textContent = dislikes;
+          dislikeCount.classList.add('dislike-count');
+
+          likeTabContainer.appendChild(likeIconContainer);
+          likeTabContainer.appendChild(likeCount);
+          likeTabContainer.appendChild(space);
+          likeTabContainer.appendChild(dislikeIconContainer);
+          likeTabContainer.appendChild(dislikeCount);
+
+          return likeTabContainer;
         }
         
         function createShowLocationButton(latitude, longitude) {
